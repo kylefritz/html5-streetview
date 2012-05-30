@@ -44,6 +44,7 @@
 
     		//this function will notify user of errors
 			function error(msg) {
+			  msg = typeof msg == 'string' ? msg : "you blocked geolocation";
 			  $('#indicator').attr('class','label label-important').html(msg);
 			}
 			//this for success
@@ -60,6 +61,8 @@
 			}
 
 			function updateImage(){
+				$('#indicator').attr('class','label').html("Determining");
+
 				//get the users location
 				//http://html5demos.com/geo
 				if (navigator.geolocation) {
