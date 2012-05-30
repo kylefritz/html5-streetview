@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head >
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <title>Order Online in Baltimore, MD - EatBmore</title>
+
+
+    <!--
+    	Twitter's *boostrap* gives you quick styles for prototyping:
+    	http://twitter.github.com/bootstrap/
+	-->
+    <link rel="stylesheet" href="https://d1eiylix7lbou2.cloudfront.net/ffe/vendor/bootstrap-2.0.2/css/bootstrap.min.css">
+    </head>
+<body>
+
+
+    <div class="container">
+		<h1>Let's find what's near you...</h1>
+		<h4>Finding your location<span id="indicator" class="label">Determining</span></h4>
+		<div id="streetview-container">
+			<img id="streetview-img"/>
+		</div>
+		<p>
+			<span id="update-image">Update Image</span>
+		</p>
+	</div>
+
+	<!--
+		JQuery is a utility library for making page manipulation (called DOM manipulation) easier
+	-->
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.7.1.min.js"></script>
+    <!--
+    	Twitter Bootstrap has it's own javascript
+	-->
+    <script src="https://d1eiylix7lbou2.cloudfront.net/ffe/vendor/bootstrap-2.0.2/js/bootstrap.min.js"></script>
+
+
+    <script>
+    	//we always wrap javascript in ready() so that the page is setup
+    	//http://api.jquery.com/ready/
+    	//
+    	$(document).ready(function(){
+
+    		//this function will notify user of errors
+			function error(msg) {
+			  $('#indicator').attr('class','label label-important').html(msg);
+			}
+			//this for success
+			function success(position) {
+			  $('#indicator').attr('class','label label-success').html('found you');
+			  console.log("you're at: <lat>:", position.coords.latitude, "<lng>:", position.coords.longitude);
+			  var img_url = 'http://maps.googleapis.com/maps/api/streetview?size=400x400&location=' +
+				  	position.coords.latitude +
+				  	',%20' +
+				  	position.coords.longitude +
+				  	'&fov=90&heading=235&pitch=10&sensor=false';
+
+			  $('#streetview-img').attr('src', img_url);
+			}
+
+			function updateImage(){
+				//get the users location
+				//http://html5demos.com/geo
+				if (navigator.geolocation) {
+				  navigator.geolocation.getCurrentPosition(success, error);
+				} else {
+				  error('geolocation not supported with your browser');
+				}
+			}
+
+			$('#update-image').click(updateImage);
+
+			updateImage();
+
+
+    	});
+    </script>
+</body>
+</html>
+
+
+
