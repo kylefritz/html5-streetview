@@ -9,11 +9,6 @@
 
     <title>Html5 Geolocation + Streetview</title>
 
-
-    <!--
-    	Twitter's *boostrap* gives you quick styles for prototyping:
-    	http://twitter.github.com/bootstrap/
-	-->
     <link rel="stylesheet" href="https://d1eiylix7lbou2.cloudfront.net/ffe/vendor/bootstrap-2.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://d1eiylix7lbou2.cloudfront.net/ffe/vendor/bootstrap-2.0.2/css/bootstrap-responsive.min.css">
     </head>
@@ -27,33 +22,21 @@
 		<div id="streetview-container">
 			<img id="streetview-img"/>
 		</div>
-		<p>
-			<span id="update-image" class="btn btn-primary">Update Image</span>
-		</p>
 	</div>
 
-	<!--
-		JQuery is a utility library for making page manipulation (called DOM manipulation) easier
-	-->
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.7.1.min.js"></script>
-    <!--
-    	Twitter Bootstrap has it's own javascript
-	-->
     <script src="https://d1eiylix7lbou2.cloudfront.net/ffe/vendor/bootstrap-2.0.2/js/bootstrap.min.js"></script>
 
 
     <script>
-    	//we always wrap javascript in ready() so that the page is setup
-    	//http://api.jquery.com/ready/
-    	//
-    	$(document).ready(function(){
+    	$(function(){
 
-    		//this function will notify user of errors
+
 			function geofailure(msg) {
 			  msg = typeof msg == 'string' ? msg : "you blocked geolocation";
 			  $('#indicator').attr('class','label label-important').html(msg);
-			}
-			//this for success
+			};
+
 			function geosuccess(position) {
 			  $('#indicator').attr('class','label label-success').html('found you');
 			  console.log("update position to: <lat>:", position.coords.latitude, "<lng>:", position.coords.longitude);
@@ -73,32 +56,24 @@
 		  		+ "<br/> speed: "+c.speed+" m/s"
 			  	);
 
+			};
+
+			$('#indicator').attr('class','label').html("Determining");
+
+			//get the users location
+			if (navigator.geolocation) {
+			  navigator.geolocation.watchPosition(
+		        geosuccess,
+		        geofailure,
+		        {
+		            enableHighAccuracy: true,
+		            maximumAge: 30000, /*how often should be refreshed*/
+		            timeout: 27000 /*how long you are willing to wait for first position*/
+		        }
+	          );
+			} else {
+			  geofailure('geolocation not supported with your browser');
 			}
-
-			function updateImage(){
-				$('#indicator').attr('class','label').html("Determining");
-
-				//get the users location
-				//http://html5demos.com/geo
-				if (navigator.geolocation) {
-				  navigator.geolocation.watchPosition(
-			        geosuccess,
-			        geofailure,
-			        {
-			            enableHighAccuracy:true,
-			            maximumAge: 30000, /*how often should be refreshed*/
-			            timeout: 27000 /*how long you are willing to wait for first position*/
-			        }
-		        );
-				} else {
-				  geofailure('geolocation not supported with your browser');
-				}
-			}
-
-			$('#update-image').click(updateImage);
-
-			updateImage();
-
 
     	});
     </script>
